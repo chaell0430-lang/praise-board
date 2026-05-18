@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>세정그룹 칭찬의 발견</title>
+<link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-a: #fff0f6;
+  --bg-b: #fff8e1;
+  --bg-c: #fce4ec;
+  --win-bg:  #fffcfa;
+  --win-bar: #f9f4f1;
+  --border:  #ede4dc;
+  --text:    #2a2020;
+  --muted:   #a0908a;
+  --accent:  #e8729a;
+  --accent-d:#c9507a;
+  --gold:    #f5a623;
+  --note-y:  #fffde7;
+  --note-b:  #e3f2fd;
+  --note-g:  #e8f5e9;
+  --note-p:  #f3e5f5;
+  --note-pk: #fce4ec;
+  --mac-red:    #ff5f57;
+  --mac-yellow: #febc2e;
+  --mac-green:  #28c840;
+  --sh: 0 8px 32px rgba(220,100,140,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  --sh-lg: 0 20px 60px rgba(220,100,140,0.18);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Noto Sans KR',sans-serif;
+  min-height:100vh;
+  color:var(--text);
+  padding:36px 20px 100px;
+  position:relative;
+  overflow-x:hidden;
+}
+
+/* 파스텔 그라디언트 배경 */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, #ffe4f0 0%, transparent 60%),
+    radial-gradient(ellipse 70% 70% at 80% 90%, #fff3c0 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 60% 40%, #ffd6e8 0%, transparent 50%),
+    #fff8f2;
+  z-index:-1;
+}
+/* 장식 원 */
+.bg-blob{
+  position:fixed;border-radius:50%;pointer-events:none;z-index:0;
+  filter:blur(60px);
+}
+.bb1{width:420px;height:420px;top:-80px;right:-80px;background:rgba(255,182,220,0.22);}
+.bb2{width:360px;height:360px;bottom:-60px;left:-60px;background:rgba(255,236,150,0.25);}
+.bb3{width:280px;height:280px;top:40%;left:30%;background:rgba(255,210,230,0.15);}
+
+.desktop{max-width:1140px;margin:0 auto;display:flex;flex-direction:column;gap:26px;position:relative;z-index:1;}
+
+/* ══ 맥 윈도우 ══ */
+.mac-window{
+  background:var(--win-bg);
+  border-radius:16px;
+  box-shadow:var(--sh);
+  border:1px solid rgba(230,190,210,0.35);
+}
+.mac-titlebar{
+  background:var(--win-bar);
+  height:42px;display:flex;align-items:center;padding:0 18px;gap:8px;
+  border-bottom:1px solid var(--border);
+  border-radius:16px 16px 0 0;
+  position:relative;
+  user-select:none;
+}
+.mac-dots{display:flex;gap:7px;}
+.dot{width:13px;height:13px;border-radius:50%;}
+.dot.r{background:var(--mac-red);box-shadow:inset 0 1px 1px rgba(255,255,255,0.4),0 0 0 0.5px rgba(0,0,0,0.15);}
+.dot.y{background:var(--mac-yellow);box-shadow:inset 0 1px 1px rgba(255,255,255,0.4),0 0 0 0.5px rgba(0,0,0,0.15);}
+.dot.g{background:var(--mac-green);box-shadow:inset 0 1px 1px rgba(255,255,255,0.4),0 0 0 0.5px rgba(0,0,0,0.15);}
+.mac-title{
+  position:absolute;left:50%;transform:translateX(-50%);
+  font-size:13px;color:var(--muted);font-weight:500;
+  letter-spacing:0.01em;pointer-events:none;white-space:nowrap;
+}
+.win-content{border-radius:0 0 16px 16px;overflow:hidden;}
+
+/* ══ 히어로 ══ */
+.hero-body{
+  padding:3.2rem 2rem 2.8rem;
+  text-align:center;
+  background:linear-gradient(160deg,#fff5fa 0%,#fffcf0 55%,#fff2f8 100%);
+  position:relative;overflow:hidden;
+}
+.hero-deco-wrap{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.hero-deco{
+  position:absolute;font-size:90px;opacity:.05;
+  font-family:serif;
+}
+.hd1{top:-20px;left:10px;transform:rotate(-18deg);}
+.hd2{bottom:-25px;right:20px;transform:rotate(22deg);}
+.hd3{top:30%;left:50%;transform:translateX(-50%) rotate(5deg);font-size:60px;opacity:.03;}
+
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:7px;
+  background:linear-gradient(90deg,rgba(255,180,210,0.4),rgba(255,230,140,0.4));
+  color:#a04070;
+  font-size:11px;font-weight:700;letter-spacing:0.14em;
+  padding:6px 18px;border-radius:99px;
+  margin-bottom:1.2rem;
+  border:1px solid rgba(220,140,180,0.3);
+  box-shadow:0 2px 8px rgba(220,140,180,0.12);
+}
+.hero-eyebrow span{font-size:13px;}
+
+.hero-body h1{
+  font-family:'Gamja Flower',cursive;
+  font-size:clamp(2.6rem,6.5vw,4.6rem);
+  color:var(--text);line-height:1.12;
+  margin-bottom:0.6rem;letter-spacing:-0.01em;
+}
+.hero-body h1 .brand{
+  background:linear-gradient(135deg,#c06090,#e8729a);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-body h1 em{font-style:normal;color:var(--accent);}
+
+.hero-notice{
+  display:inline-block;
+  background:rgba(255,245,252,0.85);
+  border:1px solid rgba(232,114,154,0.22);
+  border-radius:14px;
+  padding:14px 24px;
+  font-size:13.5px;color:#7a4060;
+  line-height:1.75;
+  margin-bottom:1.6rem;
+  max-width:500px;
+  box-shadow:0 4px 16px rgba(232,114,154,0.08);
+}
+.hero-notice strong{color:var(--accent);font-weight:700;}
+.hero-notice .sig{
+  display:block;margin-top:8px;font-size:12px;color:#c090a8;
+  font-style:italic;letter-spacing:0.03em;
+}
+
+.reward-pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.pill{
+  font-size:12.5px;font-weight:600;padding:7px 18px;
+  border-radius:99px;border:1.5px solid;
+  display:flex;align-items:center;gap:6px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.07);
+}
+.pill.s{background:#f0fdf8;color:#0d6b52;border-color:#4cc49a;}
+.pill.r{background:#fff8ef;color:#9a5c0a;border-color:#f0b040;}
+
+/* ══ 레이아웃 ══ */
+.main-layout{
+  display:grid;
+  grid-template-columns:1fr 370px;
+  gap:26px;align-items:start;
+}
+@media(max-width:880px){.main-layout{grid-template-columns:1fr;}}
+
+/* ══ 보드 ══ */
+.board-body{padding:24px;min-height:340px;}
+.board-empty{
+  display:flex;align-items:center;justify-content:center;
+  min-height:180px;flex-direction:column;gap:12px;
+  color:var(--muted);font-size:14px;
+}
+.board-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(224px,1fr));
+  gap:24px;
+}
+
+/* ══ 칭찬 카드 ══ */
+.praise-card{
+  border-radius:14px;
+  padding:20px 18px 15px;
+  border:1px solid rgba(0,0,0,0.06);
+  box-shadow:0 4px 16px rgba(0,0,0,0.07),0 1px 3px rgba(0,0,0,0.04);
+  position:relative;
+  transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .22s ease;
+  cursor:default;margin-top:14px;
+}
+.praise-card:hover{
+  transform:translateY(-6px) rotate(0deg) !important;
+  box-shadow:0 18px 40px rgba(0,0,0,0.13);z-index:10;
+}
+.praise-card.y {background:#fffde7;transform:rotate(-1.2deg);}
+.praise-card.b {background:#e3f2fd;transform:rotate(0.9deg);}
+.praise-card.g {background:#e8f5e9;transform:rotate(-0.7deg);}
+.praise-card.p {background:#f3e5f5;transform:rotate(1.3deg);}
+.praise-card.pk{background:#fce4ec;transform:rotate(-1deg);}
+
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(18px) scale(.94);}
+  to{opacity:1;}
+}
+
+.tape{
+  position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  width:58px;height:24px;
+  background:rgba(255,255,255,0.52);
+  border:1px solid rgba(0,0,0,0.08);
+  border-radius:3px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.07);
+}
+.card-from{font-size:11px;color:var(--muted);margin-bottom:3px;}
+.card-to{font-size:14px;font-weight:700;color:var(--text);margin-bottom:9px;}
+.card-msg{font-size:12.5px;color:#3a2828;line-height:1.68;margin-bottom:13px;word-break:break-all;}
+.card-actions{display:flex;align-items:center;justify-content:space-between;}
+.card-date{font-size:11px;color:var(--muted);}
+.action-btns{display:flex;gap:6px;}
+
+.icon-btn{
+  display:flex;align-items:center;gap:3px;
+  font-size:11px;color:#777;
+  background:rgba(255,255,255,0.7);
+  border:1px solid rgba(0,0,0,0.1);
+  border-radius:99px;padding:4px 11px;
+  cursor:pointer;transition:all .15s;
+  font-family:'Noto Sans KR',sans-serif;
+}
+.icon-btn:hover{background:rgba(255,255,255,0.95);border-color:#ccc;}
+.icon-btn.liked{border-color:#ffaaaa;color:#cc2244;background:rgba(255,228,232,0.9);}
+.icon-btn.cmt-on{border-color:#c8aaff;color:#5533bb;background:rgba(232,222,255,0.9);}
+
+/* 댓글 */
+.comment-area{
+  display:none;margin-top:13px;
+  border-top:1.5px dashed rgba(0,0,0,0.1);padding-top:11px;
+}
+.comment-area.open{display:block;animation:fadeUp .2s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px);}to{opacity:1;}}
+
+.comment-item{
+  margin-bottom:9px;
+  background:rgba(255,255,255,0.6);
+  border-radius:10px;padding:8px 11px;
+  border:1px solid rgba(0,0,0,0.05);
+}
+.cmt-who{font-size:11px;font-weight:700;color:#555;}
+.cmt-dt{font-size:10px;color:var(--muted);margin-left:5px;}
+.cmt-txt{font-size:12px;color:#444;line-height:1.55;margin-top:3px;}
+
+.comment-writer{
+  background:rgba(255,255,255,0.55);
+  border:1.5px dashed rgba(0,0,0,0.09);
+  border-radius:11px;padding:11px 12px;margin-top:9px;
+}
+.cmt-guide{
+  font-size:11.5px;color:#886070;margin-bottom:9px;line-height:1.55;
+  font-weight:500;
+}
+.cmt-identity-grid{
+  display:grid;grid-template-columns:1fr 1fr 0.8fr;gap:6px;margin-bottom:7px;
+}
+.cmt-identity-grid input{
+  font-size:12px;padding:6px 9px;
+  border:1.5px solid rgba(0,0,0,0.12);border-radius:8px;
+  background:rgba(255,255,255,0.8);font-family:inherit;outline:none;color:var(--text);
+  transition:border-color .15s;
+}
+.cmt-identity-grid input:focus{border-color:var(--accent);background:#fff;}
+.cmt-bottom-row{display:flex;gap:6px;align-items:center;}
+.cmt-input{
+  flex:1;font-size:12.5px;padding:7px 12px;
+  border:1.5px solid rgba(0,0,0,0.12);border-radius:99px;
+  background:rgba(255,255,255,0.8);font-family:inherit;outline:none;color:var(--text);
+  transition:border-color .15s;
+}
+.cmt-input:focus{border-color:var(--accent);background:#fff;}
+.cmt-anon{
+  display:flex;align-items:center;gap:3px;
+  font-size:11px;color:var(--muted);cursor:pointer;white-space:nowrap;
+}
+.cmt-anon input{accent-color:var(--accent);width:13px;height:13px;}
+.cmt-send{
+  font-size:11.5px;padding:7px 13px;border-radius:99px;
+  background:var(--accent);color:#fff;border:none;cursor:pointer;
+  font-family:inherit;font-weight:700;
+  transition:background .15s,transform .1s;white-space:nowrap;
+}
+.cmt-send:hover{background:var(--accent-d);}
+.cmt-send:active{transform:scale(.96);}
+
+/* ══ 폼 사이드 ══ */
+.form-body{padding:24px;}
+.fsec{
+  font-size:11px;font-weight:700;color:var(--muted);
+  letter-spacing:0.1em;margin-bottom:11px;margin-top:20px;
+  display:flex;align-items:center;gap:8px;
+}
+.fsec:first-child{margin-top:0;}
+.fsec::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:11px;}
+.field label{font-size:12px;font-weight:600;color:#6a4855;}
+.field input,.field textarea{
+  width:100%;padding:10px 14px;
+  border:1.5px solid var(--border);border-radius:10px;
+  font-size:13px;font-family:inherit;color:var(--text);
+  background:#fdf8fa;
+  transition:border-color .15s,box-shadow .15s;
+}
+.field input:focus,.field textarea:focus{
+  outline:none;border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(232,114,154,0.12);background:#fff;
+}
+.field textarea{resize:none;height:105px;line-height:1.68;}
+.char-count{font-size:11px;color:var(--muted);text-align:right;margin-top:2px;}
+
+/* 글쓰기 팁 */
+.write-tip{
+  background:linear-gradient(135deg,rgba(255,240,248,0.9),rgba(255,252,235,0.9));
+  border:1px solid rgba(232,114,154,0.2);
+  border-radius:12px;padding:12px 15px;margin-bottom:13px;
+  font-size:12px;color:#8a5568;line-height:1.75;
+}
+.write-tip .tip-title{
+  font-weight:700;color:var(--accent);margin-bottom:6px;
+  display:flex;align-items:center;gap:5px;font-size:12.5px;
+}
+.write-tip ul{padding-left:16px;}
+.write-tip li{margin-bottom:2px;}
+
+/* 익명 옵션 */
+.anon-box{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:12px 14px;
+  background:rgba(255,245,252,0.8);
+  border:1.5px solid rgba(232,114,154,0.18);
+  border-radius:11px;margin-bottom:14px;
+}
+.anon-box input[type=checkbox]{
+  width:16px;height:16px;cursor:pointer;
+  accent-color:var(--accent);margin-top:2px;flex-shrink:0;
+}
+.anon-box-text{font-size:12px;color:#6a4855;line-height:1.6;}
+.anon-box-text b{color:var(--accent);font-weight:700;display:block;margin-top:3px;font-size:11.5px;}
+
+.submit-btn{
+  width:100%;padding:14px;
+  background:linear-gradient(135deg,var(--accent) 0%,#f5906a 100%);
+  color:#fff;border:none;border-radius:12px;
+  font-size:15.5px;font-weight:700;font-family:inherit;
+  cursor:pointer;letter-spacing:0.03em;
+  transition:opacity .15s,transform .1s;
+  box-shadow:0 5px 20px rgba(232,114,154,0.32);
+}
+.submit-btn:hover{opacity:.91;}
+.submit-btn:active{transform:scale(.99);}
+
+.admin-link{text-align:right;margin-top:14px;}
+.admin-link button{
+  background:none;border:none;color:#ccc;
+  font-size:11.5px;cursor:pointer;font-family:inherit;
+  transition:color .15s;letter-spacing:0.02em;
+}
+.admin-link button:hover{color:#999;}
+
+/* ══ 관리자 모달 ══ */
+.overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(60,20,40,0.38);
+  backdrop-filter:blur(8px);
+  z-index:999;align-items:center;justify-content:center;
+}
+.overlay.open{display:flex;}
+
+.modal{
+  background:#fff;border-radius:18px;
+  padding:30px;width:94%;max-width:700px;
+  box-shadow:0 28px 80px rgba(0,0,0,0.22);
+  max-height:85vh;display:flex;flex-direction:column;
+  border:1px solid rgba(232,114,154,0.15);
+}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.modal-hd h3{font-size:17px;font-weight:700;color:var(--text);}
+.modal-close{
+  background:none;border:none;font-size:22px;
+  cursor:pointer;color:var(--muted);line-height:1;padding:2px;
+}
+.modal-pw-row{display:flex;gap:8px;margin-bottom:16px;}
+.modal-pw-row input{
+  flex:1;padding:11px 14px;
+  border:1.5px solid var(--border);border-radius:10px;
+  font-size:14px;font-family:inherit;outline:none;
+  transition:border-color .15s;
+}
+.modal-pw-row input:focus{border-color:var(--accent);}
+.modal-pw-row button{
+  padding:11px 20px;
+  background:linear-gradient(135deg,var(--accent),#f5906a);
+  color:#fff;border:none;border-radius:10px;
+  font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;
+  box-shadow:0 4px 12px rgba(232,114,154,0.3);
+}
+
+/* 탭 */
+.admin-tabs{display:flex;gap:0;margin-bottom:14px;border-bottom:2px solid var(--border);}
+.admin-tab{
+  padding:9px 20px;font-size:13px;font-weight:600;
+  color:var(--muted);cursor:pointer;border:none;background:none;
+  font-family:inherit;border-bottom:2px solid transparent;margin-bottom:-2px;
+  transition:color .15s,border-color .15s;
+}
+.admin-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+.admin-notice{
+  font-size:12px;color:#9a7070;
+  background:#fff8f0;border-radius:9px;
+  padding:9px 13px;margin-bottom:12px;
+  border-left:3px solid var(--gold);line-height:1.6;
+}
+.admin-notice span{color:#c94f2a;font-weight:700;}
+.admin-notice b{color:#c94f2a;}
+
+.tbl-wrap{overflow-y:auto;flex:1;border-radius:10px;border:1px solid var(--border);}
+.atbl{width:100%;border-collapse:collapse;font-size:12px;}
+.atbl th{
+  background:#fdf5fa;padding:10px 12px;
+  text-align:left;position:sticky;top:0;
+  color:#8a5070;font-weight:700;font-size:11px;
+  border-bottom:1px solid var(--border);letter-spacing:0.05em;
+}
+.atbl td{padding:10px 12px;border-bottom:1px solid #f5eff2;vertical-align:top;color:#444;}
+.atbl tr:hover td{background:#fff8fb;}
+.atbl tr:last-child td{border-bottom:none;}
+.real-name{color:#c94f2a;font-weight:700;}
+.anon-badge{
+  display:inline-block;background:#f0eeed;
+  padding:2px 9px;border-radius:99px;font-size:11px;color:#888;
+}
+
+.modal-foot{margin-top:16px;}
+.modal-foot button{
+  width:100%;padding:10px;background:#f5f0f2;
+  border:none;border-radius:10px;font-size:13px;
+  cursor:pointer;font-family:inherit;color:#777;
+  transition:background .15s;
+}
+.modal-foot button:hover{background:#ede5e9;}
+
+/* ══ 토스트 ══ */
+.toast{
+  position:fixed;bottom:32px;left:50%;
+  transform:translateX(-50%) translateY(28px);
+  background:rgba(50,20,35,0.9);color:#fff;
+  font-size:13.5px;font-weight:500;
+  padding:14px 26px;border-radius:99px;
+  opacity:0;transition:all .32s cubic-bezier(.34,1.2,.64,1);
+  pointer-events:none;white-space:nowrap;z-index:9999;
+  box-shadow:0 8px 24px rgba(0,0,0,0.2);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- 배경 블롭 -->
+<div class="bg-blob bb1"></div>
+<div class="bg-blob bb2"></div>
+<div class="bg-blob bb3"></div>
+
+<div class="desktop">
+
+  <!-- ══ 히어로 ══ -->
+  <div class="mac-window">
+    <div class="mac-titlebar">
+      <div class="mac-dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+      <div class="mac-title">세정그룹 칭찬의 발견 — People &amp; Culture</div>
+    </div>
+    <div class="win-content">
+      <div class="hero-body">
+        <div class="hero-deco-wrap">
+          <div class="hero-deco hd1">✦</div>
+          <div class="hero-deco hd2">✦</div>
+          <div class="hero-deco hd3">✦</div>
+        </div>
+        <div class="hero-eyebrow"><span>✦</span> MONTHLY RECOGNITION PROGRAM <span>✦</span></div>
+        <h1><span class="brand">세정그룹</span> 칭찬의 <em>발견</em></h1>
+        <div class="hero-notice">
+          정성껏 참여해주신 분들께 심사를 통해 상품을 제공할 예정이니<br>
+          <strong>많은 관심과 적극적인 참여 부탁드립니다 🎁</strong>
+          <span class="sig">— 인사팀 드림 —</span>
+        </div>
+        <div class="reward-pills">
+          <span class="pill s">✓ 칭찬 보내신 분 &nbsp;올리브영 1만원</span>
+          <span class="pill r">★ 칭찬 받으신 분 &nbsp;올리브영 3만원</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 메인 ══ -->
+  <div class="main-layout">
+
+    <!-- 칭찬 보드 -->
+    <div class="mac-window">
+      <div class="mac-titlebar">
+        <div class="mac-dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+        <div class="mac-title">📌 실시간 칭찬 보드</div>
+      </div>
+      <div class="win-content">
+        <div class="board-body">
+          <div class="board-grid" id="boardGrid">
+            <div class="board-empty"><div style="font-size:32px">💌</div><div>불러오는 중...</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 작성 폼 -->
+    <div class="mac-window">
+      <div class="mac-titlebar">
+        <div class="mac-dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+        <div class="mac-title">💌 세정인을 칭찬합니다</div>
+      </div>
+      <div class="win-content">
+        <div class="form-body">
+
+          <div class="fsec">보내는 분</div>
+          <div class="field">
+            <label for="myEmpId">사번</label>
+            <input type="text" id="myEmpId" placeholder="예) 2024001">
+          </div>
+          <div class="field">
+            <label for="myName">이름</label>
+            <input type="text" id="myName" placeholder="홍길동">
+          </div>
+          <div class="field">
+            <label for="myDept">부서</label>
+            <input type="text" id="myDept" placeholder="마케팅팀">
+          </div>
+
+          <div class="fsec">칭찬할 동료</div>
+          <div class="field">
+            <label for="toName">동료 이름</label>
+            <input type="text" id="toName" placeholder="김민지">
+          </div>
+          <div class="field">
+            <label for="toDept">동료 부서</label>
+            <input type="text" id="toDept" placeholder="개발팀">
+          </div>
+
+          <div class="fsec">칭찬 내용</div>
+          <div class="write-tip">
+            <div class="tip-title">💡 이렇게 쓰면 더 빛나요!</div>
+            <ul>
+              <li>어떤 <b>상황</b>에서 도움을 받았나요?</li>
+              <li>덕분에 어떤 <b>결과</b>가 생겼나요?</li>
+              <li>어떤 <b>감정</b>을 느꼈는지도 담아주세요 😊</li>
+            </ul>
+          </div>
+          <div class="field">
+            <textarea id="msg" maxlength="300"
+              placeholder="예) OO님이 갑작스러운 기획 변경에도 밤늦게까지 함께 검토해 주셨어요. 덕분에 발표가 성공적으로 마무리됐고 팀 전체가 큰 힘을 얻었습니다!"
+              oninput="document.getElementById('cc').textContent=this.value.length+'/300'"></textarea>
+            <div class="char-count" id="cc">0/300</div>
+          </div>
+
+          <div class="anon-box">
+            <input type="checkbox" id="anon">
+            <div class="anon-box-text">
+              익명으로 게시하기
+              <b>보드에는 '익명'으로 표시되지만, 인사팀은 작성자를 확인할 수 있어요.</b>
+            </div>
+          </div>
+
+          <button class="submit-btn" onclick="submitPraise()">✉️ 칭찬 게시하기</button>
+          <div class="admin-link"><button onclick="openAdmin()">🔐 인사팀 관리자</button></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ 관리자 모달 ══ -->
+<div class="overlay" id="adminOverlay">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3>🔐 인사팀 관리자</h3>
+      <button class="modal-close" onclick="closeAdmin()">×</button>
+    </div>
+    <div class="modal-pw-row">
+      <input type="password" id="adminPw" placeholder="비밀번호 입력"
+        onkeydown="if(event.key==='Enter')loadAdmin()">
+      <button onclick="loadAdmin()">확인</button>
+    </div>
+    <div class="admin-notice" id="adminNotice" style="display:none">
+      🔐 익명 제출자의 실명·사번은 <b>빨간색</b>으로 표시돼요. 이 정보는 인사팀만 볼 수 있어요.
+    </div>
+    <div class="admin-tabs" id="adminTabs" style="display:none">
+      <button class="admin-tab active" onclick="switchTab('praises',this)">칭찬 목록</button>
+      <button class="admin-tab" onclick="switchTab('comments',this)">댓글 목록</button>
+    </div>
+    <div class="tbl-wrap" id="adminTableWrap"></div>
+    <div class="modal-foot"><button onclick="closeAdmin()">닫기</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// !! Apps Script 배포 URL로 교체하세요 !!
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzo5IZz5z_TGLypPhNlPYvPr3WdHE2Vg0cFQnG8MJr7hwwvtyR0A4dMOMb9vftvhWo_Gw/exec";
+
+const COLORS = ['y','b','g','p','pk'];
+let colorIdx = 0;
+let adminData = { praises:[], comments:[] };
+let currentTab = 'praises';
+
+// ── 샘플 데이터 ──
+const SAMPLES = [
+  { id:'s1', from:'마케팅팀 김지수', to:'개발팀 박민준',
+    msg:'캠페인 마감 전날, 갑작스러운 디자인 수정에도 끝까지 함께해줬어요. 덕분에 캠페인이 성공적으로 마무리됐습니다!', date:'5.16', likes:3 },
+  { id:'s2', from:'운영팀 이수아', to:'디자인팀 최예린',
+    msg:'바쁜 상황에서도 항상 밝은 에너지로 팀 분위기를 살려줘요. 덕분에 힘든 프로젝트도 즐겁게 마칠 수 있었어요 :)', date:'5.14', likes:7 },
+  { id:'s3', from:'익명', to:'인사팀 정하은',
+    msg:'입사 첫 달, 모르는 것투성이였는데 언제나 친절하게 알려줘서 빠르게 적응할 수 있었어요. 정말 감사드려요!', date:'5.12', likes:12 },
+  { id:'s4', from:'기획팀 오현우', to:'영업팀 강태양',
+    msg:'협업 시 항상 명확하게 소통하고 먼저 나서서 조율해줘서 일이 훨씬 수월해졌어요. 팀에 없어선 안 될 존재예요!', date:'5.10', likes:5 },
+];
+
+// ── 카드 생성 ──
+function makeCard(data, prepend=false) {
+  const c = COLORS[colorIdx % COLORS.length]; colorIdx++;
+  const el = document.createElement('div');
+  el.className = 'praise-card ' + c;
+  el.dataset.id = data.id;
+  el.style.animation = 'cardIn .36s ease';
+
+  el.innerHTML = `
+    <div class="tape"></div>
+    <div class="card-from">${esc(data.from)} →</div>
+    <div class="card-to">${esc(data.to)}</div>
+    <div class="card-msg">${esc(data.msg)}</div>
+    <div class="card-actions">
+      <span class="card-date">${data.date}</span>
+      <div class="action-btns">
+        <button class="icon-btn" onclick="toggleLike(this,'${data.id}')" data-liked="false">
+          🤍 <span class="lc">${data.likes||0}</span>
+        </button>
+        <button class="icon-btn" onclick="toggleCmt(this,'${data.id}')">
+          💬 <span class="cc2">0</span>
+        </button>
+      </div>
+    </div>
+    <div class="comment-area" id="cmt-${data.id}">
+      <div class="comment-list" id="clist-${data.id}"></div>
+      <div class="comment-writer">
+        <div class="cmt-guide">💬 응원 댓글을 남겨보세요! 실명으로 달면 더 따뜻하게 전달돼요 🌸</div>
+        <div class="cmt-identity-grid">
+          <input type="text" placeholder="사번" id="ceid-${data.id}">
+          <input type="text" placeholder="부서명" id="cdept-${data.id}">
+          <input type="text" placeholder="이름" id="cname-${data.id}">
+        </div>
+        <div class="cmt-bottom-row">
+          <input class="cmt-input" type="text"
+            placeholder="따뜻한 응원 한마디 ☀️"
+            id="cinput-${data.id}"
+            onkeydown="if(event.key==='Enter')sendCmt('${data.id}')">
+          <label class="cmt-anon">
+            <input type="checkbox" id="canon-${data.id}"> 익명
+          </label>
+          <button class="cmt-send" onclick="sendCmt('${data.id}')">전송</button>
+        </div>
+      </div>
+    </div>`;
+
+  const grid = document.getElementById('boardGrid');
+  const empty = grid.querySelector('.board-empty');
+  if (empty) empty.remove();
+  if (prepend) grid.prepend(el);
+  else grid.appendChild(el);
+}
+
+// ── 보드 로드 ──
+async function loadBoard() {
+  const grid = document.getElementById('boardGrid');
+  if (SCRIPT_URL === "여기에_Apps_Script_배포_URL_붙여넣기") {
+    grid.innerHTML = '';
+    SAMPLES.forEach(s => makeCard(s));
+    return;
+  }
+  try {
+    const json = await (await fetch(`${SCRIPT_URL}?action=list`)).json();
+    grid.innerHTML = '';
+    if (!json.data?.length) {
+      grid.innerHTML = '<div class="board-empty"><div style="font-size:32px">💌</div><div>아직 칭찬이 없어요. 첫 번째 칭찬을 남겨보세요!</div></div>';
+      return;
+    }
+    json.data.forEach(d => makeCard(d));
+  } catch {
+    grid.innerHTML = '<div class="board-empty">❌ SCRIPT_URL을 확인해주세요.</div>';
+  }
+}
+
+// ── 칭찬 제출 ──
+async function submitPraise() {
+  const myEmpId = v('myEmpId'), myName = v('myName'), myDept = v('myDept');
+  const toName = v('toName'), toDept = v('toDept'), msg = v('msg');
+  const anon = document.getElementById('anon').checked;
+
+  if (!myEmpId||!myName||!myDept||!toName||!toDept||!msg) {
+    alert('모든 항목을 입력해주세요!'); return;
+  }
+  const date = fmtDate(new Date());
+
+  if (SCRIPT_URL !== "여기에_Apps_Script_배포_URL_붙여넣기") {
+    try {
+      const p = new URLSearchParams({action:'submit',myEmpId,myName,myDept,toName,toDept,msg,anon});
+      const json = await (await fetch(`${SCRIPT_URL}?${p}`)).json();
+      if (!json.success) { alert('제출 실패: '+json.message); return; }
+    } catch { alert('서버 오류가 발생했어요.'); return; }
+  }
+
+  makeCard({
+    id: Date.now().toString(),
+    from: anon ? '익명' : myDept+' '+myName,
+    to: toDept+' '+toName,
+    msg, date, likes:0
+  }, true);
+
+  ['myEmpId','myName','myDept','toName','toDept','msg'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('cc').textContent = '0/300';
+  document.getElementById('anon').checked = false;
+  showToast('칭찬이 보드에 올라갔어요! 상품권이 곧 도착할 거예요 🎁');
+  document.getElementById('boardGrid').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── 좋아요 ──
+function toggleLike(btn, id) {
+  const liked = btn.dataset.liked === 'true';
+  const lc = btn.querySelector('.lc');
+  const nl = !liked;
+  btn.dataset.liked = nl;
+  lc.textContent = parseInt(lc.textContent) + (nl?1:-1);
+  btn.innerHTML = (nl?'❤️ ':'🤍 ') + `<span class="lc">${lc.textContent}</span>`;
+  btn.className = 'icon-btn' + (nl?' liked':'');
+  btn.setAttribute('onclick', `toggleLike(this,'${id}')`);
+  if (SCRIPT_URL !== "여기에_Apps_Script_배포_URL_붙여넣기")
+    fetch(`${SCRIPT_URL}?action=like&id=${id}&liked=${nl}`).catch(()=>{});
+}
+
+// ── 댓글 토글 ──
+async function toggleCmt(btn, id) {
+  const area = document.getElementById('cmt-'+id);
+  const open = area.classList.toggle('open');
+  btn.classList.toggle('cmt-on', open);
+  if (open && SCRIPT_URL !== "여기에_Apps_Script_배포_URL_붙여넣기") {
+    try {
+      const json = await (await fetch(`${SCRIPT_URL}?action=getComments&praiseId=${id}`)).json();
+      renderCmts(id, json.data||[]);
+    } catch {}
+  }
+}
+
+function renderCmts(id, list) {
+  const el = document.getElementById('clist-'+id);
+  el.innerHTML = list.length === 0
+    ? '<div style="font-size:11px;color:#ccc;margin-bottom:8px;padding:4px 2px">아직 댓글이 없어요. 첫 번째 응원을 남겨보세요!</div>'
+    : list.map(c=>`
+        <div class="comment-item">
+          <span class="cmt-who">${esc(c.from)}</span>
+          <span class="cmt-dt">${c.date}</span>
+          <div class="cmt-txt">${esc(c.text)}</div>
+        </div>`).join('');
+}
+
+// ── 댓글 전송 ──
+async function sendCmt(id) {
+  const empId = v('ceid-'+id);
+  const dept  = v('cdept-'+id);
+  const name  = v('cname-'+id);
+  const text  = v('cinput-'+id);
+  const anon  = document.getElementById('canon-'+id).checked;
+
+  if (!text) { alert('댓글 내용을 입력해주세요!'); return; }
+  if (!anon && (!empId||!dept||!name)) {
+    alert('실명 댓글은 사번·부서·이름을 모두 입력해주세요!\n(익명으로 달려면 익명을 체크하세요.)'); return;
+  }
+
+  const displayName = anon ? '익명' : dept+' '+name;
+  const dateStr = fmtDateTime(new Date());
+  const list = document.getElementById('clist-'+id);
+
+  const emptyEl = list.querySelector('div[style]');
+  if (emptyEl) list.innerHTML = '';
+
+  const item = document.createElement('div');
+  item.className = 'comment-item';
+  item.innerHTML = `
+    <span class="cmt-who">${esc(displayName)}</span>
+    <span class="cmt-dt">${dateStr}</span>
+    <div class="cmt-txt">${esc(text)}</div>`;
+  list.appendChild(item);
+
+  const card = document.querySelector(`.praise-card[data-id="${id}"]`);
+  if (card) { const cc2 = card.querySelector('.cc2'); cc2.textContent = parseInt(cc2.textContent)+1; }
+
+  document.getElementById('cinput-'+id).value = '';
+
+  if (SCRIPT_URL !== "여기에_Apps_Script_배포_URL_붙여넣기") {
+    const p = new URLSearchParams({action:'comment',praiseId:id,commenterEmpId:empId,commenterName:name,commenterDept:dept,comment:text,anon});
+    fetch(`${SCRIPT_URL}?${p}`).catch(()=>{});
+  }
+}
+
+// ── 관리자 ──
+function openAdmin()  { document.getElementById('adminOverlay').classList.add('open'); }
+function closeAdmin() {
+  document.getElementById('adminOverlay').classList.remove('open');
+  document.getElementById('adminTableWrap').innerHTML='';
+  document.getElementById('adminPw').value='';
+  document.getElementById('adminNotice').style.display='none';
+  document.getElementById('adminTabs').style.display='none';
+  adminData = {praises:[],comments:[]};
+}
+
+async function loadAdmin() {
+  const pw = document.getElementById('adminPw').value;
+  const wrap = document.getElementById('adminTableWrap');
+
+  // 데모 모드
+  if (SCRIPT_URL === "여기에_Apps_Script_배포_URL_붙여넣기") {
+    if (pw !== 'hr1234') { alert('비밀번호가 틀렸습니다.'); return; }
+    document.getElementById('adminNotice').style.display='block';
+    document.getElementById('adminTabs').style.display='flex';
+    adminData.praises = [
+      { date:'5.16', display:'익명',       realName:'김지수', dept:'마케팅팀', empId:'2022031', to:'개발팀 박민준',   isAnon:'익명', msg:'캠페인 마감 전날...' },
+      { date:'5.14', display:'운영팀 이수아', realName:'이수아', dept:'운영팀',   empId:'2021015', to:'디자인팀 최예린', isAnon:'공개', msg:'바쁜 상황에서도...' },
+      { date:'5.12', display:'익명',       realName:'박도윤', dept:'전략기획팀', empId:'2024007', to:'인사팀 정하은',   isAnon:'익명', msg:'입사 첫 달...' },
+    ];
+    adminData.comments = [
+      { date:'5.17 09:12', display:'익명',         realName:'최민서', dept:'개발팀',   empId:'2023044', praiseId:'s1', text:'저도 민준님 최고라고 생각해요!' },
+      { date:'5.15 14:30', display:'운영팀 이수아', realName:'이수아', dept:'운영팀',   empId:'2021015', praiseId:'s2', text:'예린님 정말 팀의 비타민이죠!' },
+    ];
+    renderAdminTab('praises');
+    return;
+  }
+
+  try {
+    const json = await (await fetch(`${SCRIPT_URL}?action=admin&password=${pw}`)).json();
+    if (!json.success) { alert(json.message); return; }
+    document.getElementById('adminNotice').style.display='block';
+    document.getElementById('adminTabs').style.display='flex';
+    adminData.praises  = json.praises  || [];
+    adminData.comments = json.comments || [];
+    renderAdminTab(currentTab);
+  } catch(e) { alert('서버 오류: '+e); }
+}
+
+function switchTab(tab, btn) {
+  currentTab = tab;
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  renderAdminTab(tab);
+}
+
+function renderAdminTab(tab) {
+  const wrap = document.getElementById('adminTableWrap');
+  if (tab === 'praises') {
+    const rows = adminData.praises;
+    if (!rows.length) { wrap.innerHTML='<p style="padding:16px;color:#aaa;text-align:center;font-size:13px">데이터가 없어요.</p>'; return; }
+    wrap.innerHTML = `
+      <table class="atbl">
+        <thead><tr><th>날짜</th><th>보드 표시</th><th>실제 작성자 🔐</th><th>사번</th><th>받는 분</th><th>내용</th></tr></thead>
+        <tbody>${rows.map(d=>{
+          const ia = d.isAnon==='익명';
+          return `<tr>
+            <td>${d.date}</td>
+            <td>${ia?'<span class="anon-badge">익명</span>':esc(d.display)}</td>
+            <td>${ia?`<span class="real-name">${esc(d.dept)} ${esc(d.realName)}</span>`:`<span style="color:#555">${esc(d.dept)} ${esc(d.realName)}</span>`}</td>
+            <td>${ia?`<span class="real-name">${esc(d.empId)}</span>`:esc(d.empId)}</td>
+            <td>${esc(d.to)}</td>
+            <td>${esc(d.msg)}</td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table>`;
+  } else {
+    const rows = adminData.comments;
+    if (!rows.length) { wrap.innerHTML='<p style="padding:16px;color:#aaa;text-align:center;font-size:13px">댓글이 없어요.</p>'; return; }
+    wrap.innerHTML = `
+      <table class="atbl">
+        <thead><tr><th>날짜</th><th>보드 표시</th><th>실제 작성자 🔐</th><th>사번</th><th>댓글 내용</th></tr></thead>
+        <tbody>${rows.map(d=>{
+          const ia = d.display==='익명';
+          return `<tr>
+            <td>${d.date}</td>
+            <td>${ia?'<span class="anon-badge">익명</span>':esc(d.display)}</td>
+            <td>${ia?`<span class="real-name">${esc(d.dept)} ${esc(d.realName)}</span>`:`<span style="color:#555">${esc(d.dept)} ${esc(d.realName)}</span>`}</td>
+            <td>${ia?`<span class="real-name">${esc(d.empId||'')}</span>`:esc(d.empId||'')}</td>
+            <td>${esc(d.text)}</td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table>`;
+  }
+}
+
+// ── 유틸 ──
+function v(id) { return document.getElementById(id)?.value.trim()||''; }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtDate(d){ return (d.getMonth()+1)+'.'+d.getDate(); }
+function fmtDateTime(d){ return fmtDate(d)+' '+d.getHours()+':'+(d.getMinutes()+'').padStart(2,'0'); }
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+loadBoard();
+</script>
+</body>
+</html>
